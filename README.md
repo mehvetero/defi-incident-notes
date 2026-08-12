@@ -14,6 +14,7 @@ Personal notes from studying DeFi security incidents. Each file covers one incid
 | Typus Finance | Oct 2025 | $3.44M | Oracle `update_v2` missing assert on auth check | [typus.md](typus.md) |
 | Aftermath Finance | Apr 2026 | $1.14M | Negative integrator fee — signed integer boundary | [aftermath.md](aftermath.md) |
 | Drift Protocol | Apr 2026 | $285M | 6-month social engineering + durable nonces | [drift.md](drift.md) |
+| BlueMove DEX | Jul 2026 | ~$528K | Cross-version reserve desync — V1/V-latest write different values to shared `reserve_x` | [bluemove.md](bluemove.md) |
 
 ## Observations
 
@@ -30,9 +31,11 @@ The smart contract itself was fine in Radiant, Bybit, and Drift. The attack bypa
 
 For Cetus ($260M), it was a genuine math bug — but notably the first major one on Sui, a chain whose marketing emphasized "safety by construction." Typus ($3.44M) and Aftermath ($1.14M) followed on Sui — both smart contract bugs, both in modules excluded from or added after the audit.
 
-The pattern within Sui specifically: the audited core is solid; the unaudited periphery (oracles, integrator configs, late-added modules) is where the money leaves. Three Sui incidents, three unaudited modules.
+BlueMove ($528K) introduced a new class: a package upgrade that relocated token storage without retiring the old version's entry points. The audited core wasn't the issue — the upgrade process itself created the vulnerability. This is the fourth Sui incident in this list and the first where the upgrade model, not the contract logic, was the root cause.
 
-I am spending more time on operational security and key management patterns now. The code audit alone misses the most expensive failures.
+The pattern within Sui specifically: the audited core is solid; the unaudited periphery (oracles, integrator configs, late-added modules, **upgrade migrations**) is where the money leaves. Four Sui incidents, four different peripheral failure modes.
+
+I am spending more time on operational security, key management, and now upgrade-safety patterns. The code audit alone misses the most expensive failures.
 
 
 
