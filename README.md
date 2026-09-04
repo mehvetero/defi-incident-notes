@@ -16,6 +16,7 @@ Personal notes from studying DeFi security incidents. Each file covers one incid
 | Drift Protocol | Apr 2026 | $285M | 6-month social engineering + durable nonces | [drift.md](drift.md) |
 | Scallop sSUI Spool | Apr 2026 | $142K | Uninitialized `last_index` in deprecated V2 spool — 17-month-old callable package | [scallop.md](scallop.md) |
 | BlueMove DEX | Jul 2026 | ~$528K | Cross-version reserve desync — V1/V-latest write different values to shared `reserve_x` | [bluemove.md](bluemove.md) |
+| Term Finance | Aug 2026 | $8.5M | Governance takeover — $951 bought 90.66% voting power, drained vaults through legitimate proposals | [term-finance.md](term-finance.md) |
 
 ## Observations
 
@@ -37,6 +38,8 @@ Scallop ($142K) and BlueMove ($528K) form a pair: both exploited deprecated pack
 The pattern within Sui specifically: the audited core is solid; the unaudited periphery (oracles, integrator configs, late-added modules, **deprecated packages**) is where the money leaves. Five Sui incidents, and the last two share a vulnerability class that is unique to Sui's upgrade model — deprecated-but-callable code.
 
 I am spending more time on upgrade-safety patterns now. The deprecated-package class is becoming the Sui-specific analog of the proxy-storage-collision class on EVM.
+
+Term Finance ($8.5M, Aug 2026) is the first non-Sui, non-smart-contract-bug entry here. It earns its place because the attack class — governance takeover via thin token markets — is not chain-specific. Any protocol that gates vault control behind a governance vote with low participation is carrying the same risk. The code was clean; the electorate was empty. $951 bought the country.
 
 
 
